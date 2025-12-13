@@ -1,10 +1,10 @@
 import React from 'react';
 
-export const Header: React.FC = () => {
+export const ConciergerieHeader: React.FC = () => {
   return (
-    <div className="text-center py-12 bg-gradient-to-br from-teal-500 via-cyan-600 to-pink-500 relative overflow-hidden">
+    <div className="text-center py-12 bg-gradient-to-br from-purple-600 via-pink-500 to-orange-500 relative overflow-hidden">
       {/* Decorative background elements */}
-      <div className="absolute inset-0 bg-gradient-to-r from-teal-400/20 via-transparent to-pink-400/20"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 via-transparent to-orange-400/20"></div>
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-pink-300/10 rounded-full blur-3xl"></div>
       
@@ -22,24 +22,27 @@ export const Header: React.FC = () => {
         </div>
         
         <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 drop-shadow-2xl">
-          FORUM DES SERVICES
+          CONCIERGERIE DES JEUNES
         </h1>
         
         <div className="text-2xl md:text-3xl text-white font-semibold mb-2 drop-shadow-lg">
-          Église Évangélique de Poissy
+          Groupe de Jeunes - Église ADD Poissy
         </div>
         
         <div className="text-xl md:text-2xl text-white/95 font-medium mb-8 drop-shadow-lg">
-          Dimanche 29 Juin 2025
+          🎯 Objectif : Echo 2026
         </div>
         
         <div className="max-w-4xl mx-auto text-white/90 text-lg md:text-xl leading-relaxed px-6">
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-            Découvrez les différents ministères de notre église et trouvez votre place dans le service.
-            <br />
-            <span className="font-semibold text-white">
-              Chaque don, chaque passion peut être utilisé pour la gloire de Dieu et l'édification de Son peuple.
-            </span>
+            <p className="mb-4">
+              Les jeunes de notre église se mobilisent pour participer à <strong className="text-white">Echo 2026</strong>, 
+              un événement majeur de rassemblement de la jeunesse chrétienne.
+            </p>
+            <p className="font-semibold text-white">
+              En utilisant nos services de conciergerie, vous nous aidez à financer notre participation 
+              et à vivre cette expérience inoubliable ensemble ! 🙏✨
+            </p>
           </div>
         </div>
       </div>

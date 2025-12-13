@@ -23,3 +23,20 @@ export interface ServiceContact {
   created_at?: string;
   updated_at?: string;
 }
+
+// Type pour les demandes de service de conciergerie
+export interface ServiceRequestDB {
+  id: string;
+  service_id: string;
+  service_name: string;
+  service_slug: string;
+  last_name: string;
+  first_name: string;
+  email: string;
+  phone: string;
+  address?: string;
+  message?: string;
+  status: 'pending' | 'contacted' | 'completed' | 'cancelled';
+  created_at: string;
+  updated_at: string;
+}

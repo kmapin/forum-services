@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Poster } from './components/Poster';
 import { ContactModal } from './components/ContactModal';
@@ -8,6 +8,7 @@ import { ServiceDetail } from './components/ServiceDetail';
 import { services } from './data/services';
 import { ServiceTheme } from './types';
 import { supabase } from './lib/supabase';
+import { Settings } from 'lucide-react';
 import { LogIn } from 'lucide-react';
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
     checkAuth();
 
     // Écouter les changements d'authentification
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setIsAdminLoggedIn(!!session);
     });
 
@@ -118,14 +119,14 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
       <Header />
       
-      {/* Bouton de connexion administrateur */}
+      {/* Bouton Admin Forum discret */}
       <div className="fixed top-4 right-4 z-40">
         <button
           onClick={() => setIsAdminLoginOpen(true)}
-          className="bg-white/90 backdrop-blur-sm text-gray-700 px-4 py-2 rounded-full shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300 flex items-center space-x-2 border border-white/20"
+          className="bg-white/90 backdrop-blur-sm text-gray-700 p-3 rounded-full shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300 border border-gray-200"
+          title="Administration Forum"
         >
-          <LogIn size={18} />
-          <span className="font-medium">Admin</span>
+          <Settings size={20} />
         </button>
       </div>
       
