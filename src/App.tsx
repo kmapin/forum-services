@@ -11,6 +11,7 @@ import { ServiceTheme } from './types';
 import { supabase } from './lib/supabase';
 import { Settings } from 'lucide-react';
 
+
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<ServiceTheme | null>(null);
