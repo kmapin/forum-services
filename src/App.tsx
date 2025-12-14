@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Poster } from './components/Poster';
 import { ContactModal } from './components/ContactModal';
@@ -9,7 +10,6 @@ import { services } from './data/services';
 import { ServiceTheme } from './types';
 import { supabase } from './lib/supabase';
 import { Settings } from 'lucide-react';
-import { LogIn } from 'lucide-react';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -156,6 +156,16 @@ function App() {
               Église Évangélique de Poissy
             </div>
           </div>
+        </div>
+
+        {/* Lien discret vers la conciergerie */}
+        <div className="mt-8 text-center">
+          <Link 
+            to="/services" 
+            className="text-sm text-gray-400 hover:text-gray-600 transition-colors duration-300 underline decoration-dotted"
+          >
+            Conciergerie des Jeunes
+          </Link>
         </div>
       </div>
 
