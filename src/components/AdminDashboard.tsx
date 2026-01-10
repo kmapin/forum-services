@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, Users, Mail, Phone, Calendar, User, MessageSquare, Filter, Download, Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { LogOut, Users, Mail, Phone, Calendar, User, MessageSquare, Filter, Download, Search, ArrowLeft } from 'lucide-react';
 import { supabase, ServiceContact } from '../lib/supabase';
 import { services } from '../data/services';
 
@@ -8,6 +9,7 @@ interface AdminDashboardProps {
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
+  const navigate = useNavigate();
   const [contacts, setContacts] = useState<ServiceContact[]>([]);
   const [filteredContacts, setFilteredContacts] = useState<ServiceContact[]>([]);
   const [loading, setLoading] = useState(true);
@@ -154,9 +156,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Tableau de bord administrateur</h1>
-              <p className="text-gray-600">Forum des Services - Inscriptions</p>
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => navigate('/admin')}
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+                title="Retour au dashboard principal"
+              >
+                <ArrowLeft size={24} />
+              </button>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Tableau de bord administrateur</h1>
+                <p className="text-gray-600">Forum des Services - Inscriptions</p>
+              </div>
             </div>
             <button
               onClick={handleLogout}

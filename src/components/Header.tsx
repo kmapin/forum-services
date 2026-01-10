@@ -15,7 +15,7 @@ export const Header: React.FC = () => {
           <div className="bg-white/95 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-white/30">
             <img 
               src="/image.png" 
-              alt="Église Évangélique de Poissy" 
+              alt="Église Évangélique ADD Poissy" 
               className="h-20 w-auto"
             />
           </div>
@@ -26,7 +26,7 @@ export const Header: React.FC = () => {
         </h1>
         
         <div className="text-2xl md:text-3xl text-white font-semibold mb-2 drop-shadow-lg">
-          Église Évangélique de Poissy
+          Église Évangélique ADD Poissy
         </div>
         
         <div className="text-xl md:text-2xl text-white/95 font-medium mb-8 drop-shadow-lg">

@@ -15,7 +15,7 @@ export const ConciergerieHeader: React.FC = () => {
           <div className="bg-white/95 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-white/30">
             <img 
               src="/image.png" 
-              alt="Église Évangélique de Poissy" 
+              alt="Église Évangélique ADD Poissy" 
               className="h-20 w-auto"
             />
           </div>

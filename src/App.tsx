@@ -1,42 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Poster } from './components/Poster';
 import { ContactModal } from './components/ContactModal';
-import { AdminLogin } from './components/AdminLogin';
-import { AdminDashboard } from './components/AdminDashboard';
 import { ServiceDetail } from './components/ServiceDetail';
 import { services } from './data/services';
 import { ServiceTheme } from './types';
-import { supabase } from './lib/supabase';
 import { Settings } from 'lucide-react';
 
-
 function App() {
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<ServiceTheme | null>(null);
-  const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [detailService, setDetailService] = useState<ServiceTheme | null>(null);
-
-  useEffect(() => {
-    // Vérifier si l'utilisateur est déjà connecté
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setIsAdminLoggedIn(!!session);
-      setIsCheckingAuth(false);
-    };
-
-    checkAuth();
-
-    // Écouter les changements d'authentification
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAdminLoggedIn(!!session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
 
   useEffect(() => {
     // Gérer les liens directs vers les services
@@ -92,40 +68,16 @@ function App() {
     window.history.replaceState(null, '', window.location.pathname);
   };
 
-  const handleAdminLoginSuccess = () => {
-    setIsAdminLoginOpen(false);
-    setIsAdminLoggedIn(true);
-  };
-
-  const handleAdminLogout = () => {
-    setIsAdminLoggedIn(false);
-  };
-
-  if (isCheckingAuth) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Chargement...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (isAdminLoggedIn) {
-    return <AdminDashboard onLogout={handleAdminLogout} />;
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
       <Header />
       
-      {/* Bouton Admin Forum discret */}
+      {/* Bouton Admin discret */}
       <div className="fixed top-4 right-4 z-40">
         <button
-          onClick={() => setIsAdminLoginOpen(true)}
+          onClick={() => navigate('/admin')}
           className="bg-white/90 backdrop-blur-sm text-gray-700 p-3 rounded-full shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300 border border-gray-200"
-          title="Administration Forum"
+          title="Administration"
         >
           <Settings size={20} />
         </button>
@@ -154,7 +106,7 @@ function App() {
               Venez découvrir comment vos talents peuvent servir le Royaume.
             </p>
             <div className="bg-gradient-to-r from-teal-500 to-pink-500 text-white px-8 py-3 rounded-full font-semibold inline-block shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-              Église Évangélique de Poissy
+              Église Évangélique ADD Poissy
             </div>
           </div>
         </div>
@@ -184,13 +136,6 @@ function App() {
         onClose={handleCloseModal}
         selectedService={selectedService}
       />
-
-      {isAdminLoginOpen && (
-        <AdminLogin
-          onLoginSuccess={handleAdminLoginSuccess}
-          onClose={() => setIsAdminLoginOpen(false)}
-        />
-      )}
     </div>
   );
 }

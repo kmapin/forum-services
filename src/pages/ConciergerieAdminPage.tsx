@@ -24,9 +24,9 @@ export const ConciergerieAdminPage: React.FC<ConciergerieAdminPageProps> = ({ on
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/admin')}
                 className="text-gray-600 hover:text-gray-900 transition-colors"
-                title="Retour à l'accueil"
+                title="Retour au dashboard principal"
               >
                 <ArrowLeft size={24} />
               </button>
