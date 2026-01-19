@@ -152,6 +152,15 @@ export interface ServiceMember {
   notes?: string;
 }
 
+export interface ServiceLeader {
+  id: string;
+  service_id: string;
+  user_id: string;
+  position: number;
+  assigned_at: string;
+  assigned_by?: string;
+}
+
 export interface Service {
   id: string;
   name: string;

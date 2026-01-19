@@ -77,16 +77,46 @@ export const PlanningsAdmin: React.FC = () => {
 
   const fetchMembers = async (serviceId: string) => {
     try {
+      // Récupérer tous les membres du service
       const { data: membersData, error: membersError } = await supabase
         .from('service_members')
         .select('*')
-        .eq('service_id', serviceId)
-        .eq('status', 'active');
+        .eq('service_id', serviceId);
 
       if (membersError) throw membersError;
 
+      // Récupérer tous les leaders du service
+      const { data: leadersData, error: leadersError } = await supabase
+        .from('service_leaders')
+        .select('*')
+        .eq('service_id', serviceId);
+
+      if (leadersError) {
+        console.warn('Erreur lors du chargement des leaders:', leadersError);
+      }
+
+      // Créer un Set des user_ids déjà dans service_members
+      const existingUserIds = new Set((membersData || []).map(m => m.user_id));
+
+      // Convertir les leaders en format ServiceMember pour ceux qui ne sont pas déjà membres
+      const leadersAsMembers = (leadersData || [])
+        .filter(leader => !existingUserIds.has(leader.user_id))
+        .map(leader => ({
+          id: leader.id,
+          service_id: leader.service_id,
+          user_id: leader.user_id,
+          joined_at: leader.assigned_at,
+          added_by: leader.assigned_by,
+          status: 'active' as const,
+          notes: `Leader (Position ${leader.position})`,
+        }));
+
+      // Fusionner les deux listes
+      const allMembers = [...(membersData || []), ...leadersAsMembers];
+
+      // Récupérer les profils pour chaque membre
       const membersWithProfiles = await Promise.all(
-        (membersData || []).map(async (member) => {
+        allMembers.map(async (member) => {
           const { data: profile } = await supabase
             .from('profiles')
             .select('*')
