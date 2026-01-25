@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ConciergerieHeader } from '../components/ConciergerieHeader';
 import { conciergeServices } from '../data/conciergeServices';
-import { Settings } from 'lucide-react';
+import { Settings, Home } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 
 export const ServicesListPage: React.FC = () => {
@@ -17,8 +17,15 @@ export const ServicesListPage: React.FC = () => {
       {/* Header avec navigation */}
       <ConciergerieHeader />
       
-      {/* Bouton Admin discret */}
-      <div className="fixed top-4 right-4 z-40">
+      {/* Boutons de navigation */}
+      <div className="fixed top-4 right-4 z-40 flex gap-3">
+        <button
+          onClick={() => navigate('/')}
+          className="bg-white/90 backdrop-blur-sm text-gray-700 p-3 rounded-full shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300 border border-gray-200"
+          title="Retour à l'accueil"
+        >
+          <Home size={20} />
+        </button>
         <button
           onClick={() => navigate('/admin/conciergerie')}
           className="bg-white/90 backdrop-blur-sm text-gray-700 p-3 rounded-full shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300 border border-gray-200"

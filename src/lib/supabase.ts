@@ -171,3 +171,170 @@ export interface Service {
   created_at: string;
   updated_at?: string;
 }
+
+// ============================================
+// LEARNING MODULE TYPES
+// ============================================
+
+export type DifficultyLevel = 'beginner' | 'intermediate' | 'advanced';
+export type StepType = 'text' | 'video' | 'audio' | 'qcm' | 'exercise';
+export type QCMQuestionType = 'single' | 'multiple';
+export type ProgressStatus = 'not_started' | 'in_progress' | 'completed';
+export type BadgeConditionType = 'steps_completed' | 'courses_completed' | 'perfect_score' | 'streak_days' | 'first_step';
+
+export interface Course {
+  id: string;
+  teacher_id?: string;
+  title: string;
+  description?: string;
+  image_url?: string;
+  category: string;
+  difficulty_level: DifficultyLevel;
+  estimated_duration: number;
+  is_published: boolean;
+  is_featured: boolean;
+  tags: string[];
+  created_at: string;
+  updated_at?: string;
+}
+
+export interface LearningPath {
+  id: string;
+  course_id: string;
+  title: string;
+  description?: string;
+  order_index: number;
+  is_required: boolean;
+  estimated_duration: number;
+  created_at: string;
+  updated_at?: string;
+}
+
+export interface LearningStep {
+  id: string;
+  path_id: string;
+  title: string;
+  step_type: StepType;
+  content: StepContent;
+  order_index: number;
+  estimated_duration: number;
+  points: number;
+  created_at: string;
+  updated_at?: string;
+}
+
+export interface StepContent {
+  text?: string;
+  video_url?: string;
+  audio_url?: string;
+  html?: string;
+  instructions?: string;
+}
+
+export interface QCMQuestion {
+  id: string;
+  step_id: string;
+  question: string;
+  question_type: QCMQuestionType;
+  explanation?: string;
+  points: number;
+  order_index: number;
+  created_at: string;
+}
+
+export interface QCMOption {
+  id: string;
+  question_id: string;
+  option_text: string;
+  is_correct: boolean;
+  feedback?: string;
+  order_index: number;
+  created_at: string;
+}
+
+export interface CourseEnrollment {
+  id: string;
+  user_id: string;
+  course_id: string;
+  enrolled_at: string;
+  completed_at?: string;
+  progress_percentage: number;
+  last_accessed_at: string;
+}
+
+export interface StepProgress {
+  id: string;
+  user_id: string;
+  step_id: string;
+  status: ProgressStatus;
+  score: number;
+  attempts: number;
+  time_spent: number;
+  started_at?: string;
+  completed_at?: string;
+  created_at: string;
+  updated_at?: string;
+}
+
+export interface QCMAnswer {
+  id: string;
+  user_id: string;
+  question_id: string;
+  selected_options: string[];
+  is_correct: boolean;
+  answered_at: string;
+  attempt_number: number;
+}
+
+export interface LearningBadge {
+  id: string;
+  name: string;
+  description?: string;
+  icon: string;
+  condition_type: BadgeConditionType;
+  condition_value: number;
+  points: number;
+  created_at: string;
+}
+
+export interface UserBadge {
+  id: string;
+  user_id: string;
+  badge_id: string;
+  earned_at: string;
+}
+
+export interface UserLearningStats {
+  id: string;
+  user_id: string;
+  total_points: number;
+  total_steps_completed: number;
+  total_courses_completed: number;
+  total_qcm_answered: number;
+  total_perfect_scores: number;
+  current_streak: number;
+  longest_streak: number;
+  last_activity_date?: string;
+  created_at: string;
+  updated_at?: string;
+}
+
+// Types enrichis avec relations
+export interface CourseWithDetails extends Course {
+  teacher?: Profile;
+  paths?: LearningPathWithSteps[];
+  enrollment?: CourseEnrollment;
+}
+
+export interface LearningPathWithSteps extends LearningPath {
+  steps?: LearningStepWithProgress[];
+}
+
+export interface LearningStepWithProgress extends LearningStep {
+  progress?: StepProgress;
+  questions?: QCMQuestionWithOptions[];
+}
+
+export interface QCMQuestionWithOptions extends QCMQuestion {
+  options?: QCMOption[];
+}

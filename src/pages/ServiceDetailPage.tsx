@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { conciergeServices } from '../data/conciergeServices';
 import { serviceRequestService } from '../services/serviceRequestServiceSupabase';
-import { ArrowLeft, Mail, Phone, User, MessageSquare, MapPin, Loader2, Settings } from 'lucide-react';
+import { ArrowLeft, Mail, Phone, User, MessageSquare, MapPin, Loader2, Settings, Home } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 
 export const ServiceDetailPage: React.FC = () => {
@@ -141,8 +141,15 @@ export const ServiceDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-orange-50">
-      {/* Bouton Admin discret */}
-      <div className="fixed top-4 right-4 z-40">
+      {/* Boutons de navigation */}
+      <div className="fixed top-4 right-4 z-40 flex gap-3">
+        <button
+          onClick={() => navigate('/')}
+          className="bg-white/90 backdrop-blur-sm text-gray-700 p-3 rounded-full shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300 border border-gray-200"
+          title="Retour à l'accueil"
+        >
+          <Home size={20} />
+        </button>
         <button
           onClick={() => navigate('/admin/conciergerie')}
           className="bg-white/90 backdrop-blur-sm text-gray-700 p-3 rounded-full shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300 border border-gray-200"

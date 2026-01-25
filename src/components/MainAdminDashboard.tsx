@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Users, Package, ArrowRight, Church } from 'lucide-react';
+import { LogOut, Users, Package, ArrowRight, Church, GraduationCap } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface MainAdminDashboardProps {
@@ -45,6 +45,16 @@ export const MainAdminDashboard: React.FC<MainAdminDashboardProps> = ({ onLogout
       bgColor: 'bg-orange-50',
       iconColor: 'text-orange-600',
       path: '/admin/church'
+    },
+    {
+      id: 'learning',
+      title: 'Module Formation',
+      description: 'Créer des cours, gérer les parcours pédagogiques et suivre la progression des étudiants',
+      icon: GraduationCap,
+      color: 'from-indigo-500 to-purple-500',
+      bgColor: 'bg-indigo-50',
+      iconColor: 'text-indigo-600',
+      path: '/learning'
     }
   ];
 

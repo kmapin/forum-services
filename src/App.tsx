@@ -6,7 +6,7 @@ import { ContactModal } from './components/ContactModal';
 import { ServiceDetail } from './components/ServiceDetail';
 import { services } from './data/services';
 import { ServiceTheme } from './types';
-import { Settings } from 'lucide-react';
+import { Settings, Home } from 'lucide-react';
 
 function App() {
   const navigate = useNavigate();
@@ -72,8 +72,15 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
       <Header />
       
-      {/* Bouton Admin discret */}
-      <div className="fixed top-4 right-4 z-40">
+      {/* Boutons de navigation */}
+      <div className="fixed top-4 right-4 z-40 flex gap-3">
+        <button
+          onClick={() => navigate('/')}
+          className="bg-white/90 backdrop-blur-sm text-gray-700 p-3 rounded-full shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300 border border-gray-200"
+          title="Retour à l'accueil"
+        >
+          <Home size={20} />
+        </button>
         <button
           onClick={() => navigate('/admin')}
           className="bg-white/90 backdrop-blur-sm text-gray-700 p-3 rounded-full shadow-lg hover:bg-white hover:shadow-xl transition-all duration-300 border border-gray-200"
