@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, GraduationCap, ArrowLeft, Home, Plus, Settings, X } from 'lucide-react';
+import { BookOpen, GraduationCap, ArrowLeft, Home, Plus, Settings, X, LogOut, ChevronDown } from 'lucide-react';
 import { supabase, Profile } from '../../lib/supabase';
 import { StudentDashboard } from './student/StudentDashboard';
 import { CourseCatalog } from './student/CourseCatalog';
@@ -25,6 +25,7 @@ export const LearningApp: React.FC<LearningAppProps> = ({ onBack }) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newCourse, setNewCourse] = useState({ title: '', description: '', category: '', difficulty_level: 'beginner' as const });
   const [creating, setCreating] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     checkUser();
@@ -98,6 +99,18 @@ export const LearningApp: React.FC<LearningAppProps> = ({ onBack }) => {
       console.error('Erreur:', err);
     } finally {
       setCreating(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      setProfile(null);
+      setUser(null);
+      setView('home');
+      setMenuOpen(false);
+    } catch (err) {
+      console.error('Erreur lors de la déconnexion:', err);
     }
   };
 
@@ -179,20 +192,45 @@ export const LearningApp: React.FC<LearningAppProps> = ({ onBack }) => {
             </nav>
 
             {profile && (
-              <div className="flex items-center gap-3">
-                <div className="text-right">
-                  <p className="text-sm font-medium text-gray-900">{profile.full_name}</p>
-                  <p className="text-xs text-gray-500">{profile.role}</p>
-                </div>
-                <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center">
-                  {profile.avatar_url ? (
-                    <img src={profile.avatar_url} alt="" className="w-full h-full rounded-full object-cover" />
-                  ) : (
-                    <span className="text-teal-600 font-semibold">
-                      {profile.full_name?.charAt(0) || '?'}
-                    </span>
-                  )}
-                </div>
+              <div className="relative">
+                <button
+                  onClick={() => setMenuOpen(!menuOpen)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
+                    {profile.avatar_url ? (
+                      <img src={profile.avatar_url} alt="" className="w-full h-full rounded-full object-cover" />
+                    ) : (
+                      <span className="text-teal-600 font-semibold text-sm">
+                        {profile.full_name?.charAt(0) || '?'}
+                      </span>
+                    )}
+                  </div>
+                  <span className="hidden sm:block text-sm font-medium text-gray-700">
+                    {profile.full_name?.split(' ')[0] || 'Mon compte'}
+                  </span>
+                  <ChevronDown size={16} className={`text-gray-400 transition-transform ${menuOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {menuOpen && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
+                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
+                      <div className="px-4 py-2 border-b border-gray-100">
+                        <p className="font-medium text-gray-900">{profile.full_name}</p>
+                        <p className="text-sm text-gray-500">{profile.role}</p>
+                      </div>
+                      
+                      <button
+                        onClick={handleLogout}
+                        className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 flex items-center gap-3"
+                      >
+                        <LogOut size={18} />
+                        Déconnexion
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             )}
           </div>

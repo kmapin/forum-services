@@ -17,6 +17,7 @@ import {
   MessageCircle
 } from 'lucide-react';
 import { supabase, Profile } from '../lib/supabase';
+import { AuthModal } from '../components/learning/common/AuthModal';
 
 interface FeatureCard {
   id: string;
@@ -72,6 +73,7 @@ export const LandingPage: React.FC = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -102,6 +104,11 @@ export const LandingPage: React.FC = () => {
     setUser(null);
     setProfile(null);
     setMenuOpen(false);
+  };
+
+  const handleAuthSuccess = async () => {
+    await checkAuth();
+    setShowAuthModal(false);
   };
 
   const isAdmin = profile?.role && ['admin', 'pastor', 'leader'].includes(profile.role);
@@ -187,7 +194,7 @@ export const LandingPage: React.FC = () => {
                 </div>
               ) : (
                 <button
-                  onClick={() => navigate('/admin')}
+                  onClick={() => setShowAuthModal(true)}
                   className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium"
                 >
                   <LogIn size={16} />
@@ -387,6 +394,14 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
       </footer>
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={handleAuthSuccess}
+        defaultMode="login"
+      />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Users, Package, ArrowRight, Church, GraduationCap } from 'lucide-react';
+import { LogOut, Users, Package, ArrowRight, Church, GraduationCap, Home } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface MainAdminDashboardProps {
@@ -68,13 +68,22 @@ export const MainAdminDashboard: React.FC<MainAdminDashboardProps> = ({ onLogout
               <h1 className="text-2xl font-bold text-gray-900">Tableau de bord administrateur</h1>
               <p className="text-gray-600">Choisissez la section à administrer</p>
             </div>
-            <button
-              onClick={handleLogout}
-              className="flex items-center space-x-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
-            >
-              <LogOut size={18} />
-              <span>Déconnexion</span>
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => navigate('/')}
+                className="flex items-center space-x-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                <Home size={18} />
+                <span>Accueil</span>
+              </button>
+              <button
+                onClick={handleLogout}
+                className="flex items-center space-x-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+              >
+                <LogOut size={18} />
+                <span>Déconnexion</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
