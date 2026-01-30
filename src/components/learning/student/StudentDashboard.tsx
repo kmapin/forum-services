@@ -427,7 +427,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
           setPendingCourseId(null);
         }}
         onSuccess={handleAuthSuccess}
-        defaultMode="signup"
+        defaultMode="login"
       />
     </div>
   );

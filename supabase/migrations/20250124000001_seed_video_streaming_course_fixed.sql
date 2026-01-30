@@ -52,7 +52,7 @@ BEGIN
     'Vue d''ensemble - Ancienne configuration',
     'text',
     jsonb_build_object(
-      'text', '## Architecture de l''ancienne configuration
+      'body', '## Architecture de l''ancienne configuration
 
 ### Schéma de connexion
 
@@ -131,7 +131,7 @@ Le PC est le cœur du système et gère :
     'Équipements - Ancienne configuration',
     'text',
     jsonb_build_object(
-      'text', '## Présentation du matériel
+      'body', '## Présentation du matériel
 
 ### Console de mixage audio
 - **Rôle** : Mixage de toutes les sources audio (micros, instruments, playback)
@@ -180,7 +180,7 @@ Le PC est le cœur du système et gère :
     'Vue d''ensemble - Nouvelle configuration',
     'text',
     jsonb_build_object(
-      'text', '## Architecture de la nouvelle configuration
+      'body', '## Architecture de la nouvelle configuration
 
 ### Schéma de connexion
 
@@ -284,7 +284,7 @@ Rôle simplifié :
     'Équipements - Nouvelle configuration',
     'text',
     jsonb_build_object(
-      'text', '## Présentation du matériel évolué
+      'body', '## Présentation du matériel évolué
 
 ### ATEM Mini Pro (Nouveau !)
 - **Rôle central** : Mélangeur vidéo professionnel
@@ -408,7 +408,7 @@ Rôle simplifié :
     'Démarrage de la diffusion - Début du culte',
     'text',
     jsonb_build_object(
-      'text', '## Checklist complète de démarrage
+      'body', '## Checklist complète de démarrage
 
 ### Responsabilités de l''équipe vidéo (début du culte)
 
@@ -532,7 +532,7 @@ Rôle simplifié :
     'Arrêt de la diffusion - Fin du culte',
     'text',
     jsonb_build_object(
-      'text', '## Procédure de fin de diffusion
+      'body', '## Procédure de fin de diffusion
 
 ### Responsabilités de l''équipe vidéo (fin du culte)
 
@@ -717,7 +717,7 @@ Rôle simplifié :
     'Installation des caméras - Début du culte',
     'text',
     jsonb_build_object(
-      'text', '## Procédure d''installation des caméras
+      'body', '## Procédure d''installation des caméras
 
 ### Responsabilités de l''équipe caméras (début du culte)
 
@@ -856,7 +856,7 @@ Rôle simplifié :
     'Rangement des caméras - Fin du culte',
     'text',
     jsonb_build_object(
-      'text', '## Procédure de rangement des caméras
+      'body', '## Procédure de rangement des caméras
 
 ### Responsabilités de l''équipe caméras (fin du culte)
 

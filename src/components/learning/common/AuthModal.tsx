@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Mail, Lock, User, LogIn, UserPlus } from 'lucide-react';
 import { supabase } from '../../../lib/supabase';
 
@@ -21,6 +21,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (isOpen) {
+      setMode(defaultMode);
+      setError('');
+    }
+  }, [isOpen, defaultMode]);
 
   if (!isOpen) return null;
 
