@@ -416,43 +416,82 @@ export const PathEditor: React.FC<PathEditorProps> = ({ courseId, onBack }) => {
                 />
               </div>
               {editingStep.step_type === 'text' && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Contenu (Markdown enrichi)</label>
-                  <RichTextEditor
-                    value={(editingStep.content as any)?.body || ''}
-                    onChange={(newValue) => setEditingStep({ 
-                      ...editingStep, 
-                      content: { ...(editingStep.content as any), body: newValue } as any
-                    })}
-                    onImageUpload={async (file) => {
-                      return new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.onloadend = async () => {
-                          try {
-                            const timestamp = Date.now();
-                            const fileName = `${timestamp}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-                            const filePath = `courses/${courseId}/images/${fileName}`;
-                            
-                            const { error } = await supabase.storage
-                              .from('learning-content')
-                              .upload(filePath, file);
-                            
-                            if (error) throw error;
-                            
-                            const { data: { publicUrl } } = supabase.storage
-                              .from('learning-content')
-                              .getPublicUrl(filePath);
-                            
-                            resolve(publicUrl);
-                          } catch (err) {
-                            reject(err);
-                          }
-                        };
-                        reader.readAsDataURL(file);
-                      });
-                    }}
-                    placeholder="# Titre\n\nCommencez à écrire votre contenu..."
-                  />
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Contenu (Markdown enrichi)</label>
+                    <RichTextEditor
+                      value={(editingStep.content as any)?.body || ''}
+                      onChange={(newValue) => setEditingStep({ 
+                        ...editingStep, 
+                        content: { ...(editingStep.content as any), body: newValue } as any
+                      })}
+                      onImageUpload={async (file) => {
+                        return new Promise((resolve, reject) => {
+                          const reader = new FileReader();
+                          reader.onloadend = async () => {
+                            try {
+                              const timestamp = Date.now();
+                              const fileName = `${timestamp}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+                              const filePath = `courses/${courseId}/images/${fileName}`;
+                              
+                              const { error } = await supabase.storage
+                                .from('learning-content')
+                                .upload(filePath, file);
+                              
+                              if (error) throw error;
+                              
+                              const { data: { publicUrl } } = supabase.storage
+                                .from('learning-content')
+                                .getPublicUrl(filePath);
+                              
+                              resolve(publicUrl);
+                            } catch (err) {
+                              reject(err);
+                            }
+                          };
+                          reader.readAsDataURL(file);
+                        });
+                      }}
+                      placeholder="# Titre\n\nCommencez à écrire votre contenu..."
+                    />
+                  </div>
+                  
+                  <div className="border-t pt-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Narration audio (optionnel)
+                    </label>
+                    <p className="text-xs text-gray-500 mb-3">
+                      Enregistrez votre voix pour accompagner le contenu écrit. L'audio sera lu automatiquement lors de la consultation de cette étape.
+                    </p>
+                    <AudioRecorder
+                      existingAudioUrl={(editingStep.content as any)?.audio_url}
+                      onRecordingComplete={async (audioBlob) => {
+                        try {
+                          const timestamp = Date.now();
+                          const fileName = `${timestamp}_narration.webm`;
+                          const filePath = `courses/${courseId}/audio/${fileName}`;
+                          
+                          const { error } = await supabase.storage
+                            .from('learning-content')
+                            .upload(filePath, audioBlob);
+                          
+                          if (error) throw error;
+                          
+                          const { data: { publicUrl } } = supabase.storage
+                            .from('learning-content')
+                            .getPublicUrl(filePath);
+                          
+                          setEditingStep({ 
+                            ...editingStep, 
+                            content: { ...(editingStep.content as any), audio_url: publicUrl } as any
+                          });
+                        } catch (err) {
+                          console.error('Erreur upload audio:', err);
+                          alert('Erreur lors de l\'enregistrement');
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
               )}
               {editingStep.step_type === 'video' && (

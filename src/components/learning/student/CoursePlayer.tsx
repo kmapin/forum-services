@@ -258,25 +258,47 @@ export const CoursePlayer: React.FC<CoursePlayerProps> = ({ courseId, onBack }) 
                   }}
                 />
               ) : currentStep.step_type === 'text' && (currentStep.content as any)?.body ? (
-                <div className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-strong:text-gray-900 prose-em:text-gray-700 prose-code:text-pink-600 prose-code:bg-pink-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-gray-800 prose-pre:text-gray-100 prose-a:text-teal-600 prose-img:rounded-lg prose-img:shadow-md prose-ul:list-disc prose-ol:list-decimal prose-li:my-1 prose-table:border-collapse prose-th:border prose-th:border-gray-300 prose-th:bg-gray-100 prose-th:p-3 prose-th:font-semibold prose-td:border prose-td:border-gray-300 prose-td:p-3 prose-blockquote:border-l-4 prose-blockquote:border-teal-500 prose-blockquote:pl-4 prose-blockquote:italic">
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    components={{
-                      img: ({ node, ...props }) => (
-                        <img {...props} className="rounded-lg shadow-md max-w-full h-auto" loading="lazy" />
-                      ),
-                      a: ({ node, ...props }) => (
-                        <a {...props} className="text-teal-600 hover:text-teal-700 underline" target="_blank" rel="noopener noreferrer" />
-                      ),
-                      table: ({ node, ...props }) => (
-                        <div className="overflow-x-auto my-4">
-                          <table {...props} className="min-w-full border-collapse" />
+                <div className="space-y-4">
+                  {/* Audio Narration */}
+                  {(currentStep.content as any)?.audio_url && (
+                    <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-4 border border-purple-200">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="p-2 bg-purple-100 rounded-full">
+                          <Headphones className="text-purple-600" size={20} />
                         </div>
-                      ),
-                    }}
-                  >
-                    {(currentStep.content as any).body}
-                  </ReactMarkdown>
+                        <h4 className="text-sm font-semibold text-gray-900">Narration audio</h4>
+                      </div>
+                      <audio
+                        src={(currentStep.content as any).audio_url}
+                        controls
+                        className="w-full"
+                      >
+                        Votre navigateur ne supporte pas la lecture audio.
+                      </audio>
+                    </div>
+                  )}
+                  
+                  {/* Text Content */}
+                  <div className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-strong:text-gray-900 prose-em:text-gray-700 prose-code:text-pink-600 prose-code:bg-pink-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-gray-800 prose-pre:text-gray-100 prose-a:text-teal-600 prose-img:rounded-lg prose-img:shadow-md prose-ul:list-disc prose-ol:list-decimal prose-li:my-1 prose-table:border-collapse prose-th:border prose-th:border-gray-300 prose-th:bg-gray-100 prose-th:p-3 prose-th:font-semibold prose-td:border prose-td:border-gray-300 prose-td:p-3 prose-blockquote:border-l-4 prose-blockquote:border-teal-500 prose-blockquote:pl-4 prose-blockquote:italic">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        img: ({ node, ...props }) => (
+                          <img {...props} className="rounded-lg shadow-md max-w-full h-auto" loading="lazy" />
+                        ),
+                        a: ({ node, ...props }) => (
+                          <a {...props} className="text-teal-600 hover:text-teal-700 underline" target="_blank" rel="noopener noreferrer" />
+                        ),
+                        table: ({ node, ...props }) => (
+                          <div className="overflow-x-auto my-4">
+                            <table {...props} className="min-w-full border-collapse" />
+                          </div>
+                        ),
+                      }}
+                    >
+                      {(currentStep.content as any).body}
+                    </ReactMarkdown>
+                  </div>
                 </div>
               ) : currentStep.step_type === 'video' && (currentStep.content as any)?.video_url ? (
                 <div className="space-y-4">
