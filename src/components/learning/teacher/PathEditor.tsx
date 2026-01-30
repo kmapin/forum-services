@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Plus, GripVertical, Edit2, Trash2, FileText, Video, Music, HelpCircle, PenTool, ChevronUp, ChevronDown, Save, X, Settings } from 'lucide-react';
 import { supabase, LearningPath, LearningStep, StepType } from '../../../lib/supabase';
 import { QCMEditor } from './QCMEditor';
+import { RichTextEditor } from './RichTextEditor';
+import { AudioRecorder } from './AudioRecorder';
+import { MediaUploader } from './MediaUploader';
 
 interface PathEditorProps {
   courseId: string;
@@ -388,8 +391,8 @@ export const PathEditor: React.FC<PathEditorProps> = ({ courseId, onBack }) => {
 
       {/* Step Editor Modal */}
       {editingStep && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-6 w-full max-w-[75vw] max-h-[90vh] overflow-y-auto sm:max-w-[90vw] md:max-w-[85vw] lg:max-w-[75vw]">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               Modifier l'étape
             </h3>
@@ -414,47 +417,131 @@ export const PathEditor: React.FC<PathEditorProps> = ({ courseId, onBack }) => {
               </div>
               {editingStep.step_type === 'text' && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Contenu (Markdown)</label>
-                  <textarea
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Contenu (Markdown enrichi)</label>
+                  <RichTextEditor
                     value={(editingStep.content as any)?.body || ''}
-                    onChange={(e) => setEditingStep({ 
+                    onChange={(newValue) => setEditingStep({ 
                       ...editingStep, 
-                      content: { ...(editingStep.content as any), body: e.target.value } as any
+                      content: { ...(editingStep.content as any), body: newValue } as any
                     })}
-                    rows={12}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 font-mono text-sm"
-                    placeholder="# Titre\n\nVotre contenu en Markdown..."
+                    onImageUpload={async (file) => {
+                      return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onloadend = async () => {
+                          try {
+                            const timestamp = Date.now();
+                            const fileName = `${timestamp}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+                            const filePath = `courses/${courseId}/images/${fileName}`;
+                            
+                            const { error } = await supabase.storage
+                              .from('learning-content')
+                              .upload(filePath, file);
+                            
+                            if (error) throw error;
+                            
+                            const { data: { publicUrl } } = supabase.storage
+                              .from('learning-content')
+                              .getPublicUrl(filePath);
+                            
+                            resolve(publicUrl);
+                          } catch (err) {
+                            reject(err);
+                          }
+                        };
+                        reader.readAsDataURL(file);
+                      });
+                    }}
+                    placeholder="# Titre\n\nCommencez à écrire votre contenu..."
                   />
-                  <p className="text-xs text-gray-500 mt-1">Utilisez la syntaxe Markdown pour formater le texte</p>
                 </div>
               )}
               {editingStep.step_type === 'video' && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">URL de la vidéo</label>
-                  <input
-                    type="url"
-                    value={editingStep.content.video_url || ''}
-                    onChange={(e) => setEditingStep({ 
-                      ...editingStep, 
-                      content: { ...editingStep.content, video_url: e.target.value } 
-                    })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
-                    placeholder="https://youtube.com/..."
-                  />
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">URL de la vidéo (YouTube, Vimeo, etc.)</label>
+                    <input
+                      type="url"
+                      value={editingStep.content.video_url || ''}
+                      onChange={(e) => setEditingStep({ 
+                        ...editingStep, 
+                        content: { ...editingStep.content, video_url: e.target.value } 
+                      })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                      placeholder="https://youtube.com/watch?v=..."
+                    />
+                  </div>
+                  <div className="border-t pt-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Ou télécharger une vidéo</label>
+                    <MediaUploader
+                      courseId={courseId}
+                      acceptedTypes="video"
+                      onUploadComplete={(url) => setEditingStep({ 
+                        ...editingStep, 
+                        content: { ...editingStep.content, video_url: url } 
+                      })}
+                      label="Télécharger une vidéo"
+                    />
+                  </div>
                 </div>
               )}
               {editingStep.step_type === 'audio' && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">URL de l'audio</label>
-                  <input
-                    type="url"
-                    value={editingStep.content.audio_url || ''}
-                    onChange={(e) => setEditingStep({ 
-                      ...editingStep, 
-                      content: { ...editingStep.content, audio_url: e.target.value } 
-                    })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
-                  />
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Enregistrer votre voix</label>
+                    <AudioRecorder
+                      existingAudioUrl={editingStep.content.audio_url}
+                      onRecordingComplete={async (audioBlob) => {
+                        try {
+                          const timestamp = Date.now();
+                          const fileName = `${timestamp}_recording.webm`;
+                          const filePath = `courses/${courseId}/audio/${fileName}`;
+                          
+                          const { error } = await supabase.storage
+                            .from('learning-content')
+                            .upload(filePath, audioBlob);
+                          
+                          if (error) throw error;
+                          
+                          const { data: { publicUrl } } = supabase.storage
+                            .from('learning-content')
+                            .getPublicUrl(filePath);
+                          
+                          setEditingStep({ 
+                            ...editingStep, 
+                            content: { ...editingStep.content, audio_url: publicUrl } 
+                          });
+                        } catch (err) {
+                          console.error('Erreur upload audio:', err);
+                          alert('Erreur lors de l\'enregistrement');
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="border-t pt-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Ou télécharger un fichier audio</label>
+                    <MediaUploader
+                      courseId={courseId}
+                      acceptedTypes="audio"
+                      onUploadComplete={(url) => setEditingStep({ 
+                        ...editingStep, 
+                        content: { ...editingStep.content, audio_url: url } 
+                      })}
+                      label="Télécharger un fichier audio"
+                    />
+                  </div>
+                  <div className="border-t pt-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Ou saisir une URL audio</label>
+                    <input
+                      type="url"
+                      value={editingStep.content.audio_url || ''}
+                      onChange={(e) => setEditingStep({ 
+                        ...editingStep, 
+                        content: { ...editingStep.content, audio_url: e.target.value } 
+                      })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"
+                      placeholder="https://..."
+                    />
+                  </div>
                 </div>
               )}
               {editingStep.step_type === 'qcm' && (
