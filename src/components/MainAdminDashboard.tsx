@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Users, Package, ArrowRight, Church, GraduationCap, Home } from 'lucide-react';
+import { LogOut, Users, Package, ArrowRight, Church, GraduationCap, Home, UserCog } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface MainAdminDashboardProps {
@@ -55,6 +55,16 @@ export const MainAdminDashboard: React.FC<MainAdminDashboardProps> = ({ onLogout
       bgColor: 'bg-indigo-50',
       iconColor: 'text-indigo-600',
       path: '/learning'
+    },
+    {
+      id: 'users',
+      title: 'Gestion des Utilisateurs',
+      description: 'Gérer les profils utilisateurs et modifier leurs rôles',
+      icon: UserCog,
+      color: 'from-emerald-500 to-teal-500',
+      bgColor: 'bg-emerald-50',
+      iconColor: 'text-emerald-600',
+      path: '/admin/users'
     }
   ];
 

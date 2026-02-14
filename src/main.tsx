@@ -8,6 +8,7 @@ import { ConciergerieAdminWrapper } from './pages/ConciergerieAdminWrapper';
 import { MainAdminWrapper } from './pages/MainAdminWrapper';
 import { ForumAdminWrapper } from './pages/ForumAdminWrapper';
 import { ChurchAdminWrapper } from './pages/ChurchAdminWrapper';
+import { UsersAdminWrapper } from './pages/UsersAdminWrapper';
 import { LearningWrapper } from './pages/LearningWrapper';
 import { LandingPage } from './pages/LandingPage';
 import './index.css';
@@ -30,6 +31,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/admin/forum" element={<ForumAdminWrapper />} />
         <Route path="/admin/conciergerie" element={<ConciergerieAdminWrapper />} />
         <Route path="/admin/church" element={<ChurchAdminWrapper />} />
+        <Route path="/admin/users" element={<UsersAdminWrapper />} />
         <Route path="/learning/*" element={<LearningWrapper />} />
       </Routes>
     </BrowserRouter>
